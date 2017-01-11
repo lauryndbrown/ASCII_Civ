@@ -36,10 +36,10 @@ class Nation:
 class Player:
     """
     """
-    def __init__(self, name):
+    def __init__(self, name, high_score=0, nations=[]):
         self.name = name
-        self.high_score = 0
-        self.nations = []
+        self.high_score = high_score
+        self.nations = nations
     def add_nation(self, nation):
         if nation not in self.nations:
             self.nations.append(nation)
@@ -50,7 +50,9 @@ class Game:
     """
     Logic wrapper for the overall game
     """
-    YES_OR_NO = {'Y':True,'N':False}
+    YES = "Y"
+    NO = "N"
+    YES_OR_NO = {YES:True,NO:False}
     COMPUTER_NAME = "computer"
     def __init__(self, first_player, second_player=COMPUTER_NAME, start_day=0):
         self.first_player = first_player
@@ -61,19 +63,37 @@ class Game:
         """
         Begin the Game
         """
-        self.start_menu()
+        print("The Game Begins!")
+        still_playing = True
+        while still_playing:
+            still_playing = Game.yes_or_no("Do you want to Continue?[Y/N] ")
+            if still_playing:
+                print("Playing")
+            else:
+                self.save_game()
+    def save_game(self):
+        pass
 
-    def start_menu(self):
+    def start_menu():
         """
         Prints out the Start Menu Screen to to player
         """
         print("Welcome to ASCII Civ")
-        new_game = input("Do you want to play a New Game?[Y/N] ")
-        if self.YES_OR_NO[new_game]:
+        new_game = Game.yes_or_no("Do you want to play a New Game?[Y/N] ")
+        if new_game:
             print("New Game")
         else:#TODO:check if previous game exists
             print("Last Saved Game")
-
+        return new_game
+    def yes_or_no(message):
+        """
+        Helper Function that handles user input for yes or no questions
+        """
+        while True:
+            response = input(message)
+            if response==Game.YES or response==Game.NO:
+                return Game.YES_OR_NO[response]
+        
     def settings_menu(self):
         """
         Prints the settings menu Screen to the player
@@ -86,10 +106,15 @@ class Game:
         print("Game")
 import sys
 def main(argv):
-
-    player = Player("Flick")
-    game = Game(player)
-    game.start()
+    new_game = Game.start_menu()
+    if new_game: 
+        player = Player(input("What's your name? "))
+        game = Game(player)
+        game.start()
+    else:
+        #TODO: Add functionality for loading last saved game
+        pass
+    print("End Game")
 if __name__=="__main__":
     main(sys.argv)
 
