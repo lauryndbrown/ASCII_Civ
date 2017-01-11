@@ -109,7 +109,7 @@ class Game:
         new_game = yes_or_no("Do you want to play a New Game?[Y/N] ")
         if new_game:
             print("New Game")
-        else:#TODO:check if previous game exists
+        else:
             print("Last Saved Game")
         return new_game
    
@@ -134,7 +134,6 @@ def main(argv):
         game = Game(player)
         game.start()
     else:
-        #TODO: Add functionality for loading last saved game
         pass
     print("End Game")
 if __name__=="__main__":
