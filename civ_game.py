@@ -4,7 +4,8 @@ ASCII art.
 
 Writen by Lauryn D. Brown 
 """
-
+import game_display as Display
+from input_tools import * 
 class Citizen:
     """
     
@@ -22,41 +23,62 @@ class Building:
 class City:
     """
     """
-    def __init__(self, name, nation, citizens):
+    def __init__(self, name, citizens=[], buildings=[]):
         self.name = name
-        self.nation = nation
         self.citizens = citizens
+        self.buildings = buildings
+    def add_citizen(self, citizen):
+        if citizen not in self.citizens:
+            self.citizens.append(citizen)
+    def remove_citizen(self, citizen):
+        if citizen in self.citizens:
+            self.citizens.remove(citizen)
+    def add_building(self, building):
+        if building not in self.buildings:
+            self.buildings.append(building)
+    def remove_building(self, building):
+        if building in self.buildings:
+            self.buildings.remove(building)
 class Nation:
     """
     """
-    def __init__(self, name, wealth, cities):
+    def __init__(self, name, wealth=100, cities=[]):
         self.name = name
         self.wealth = wealth
         self.cities = cities
+    def add_city(self, cities):
+        if city not in self.cities:
+            self.cities.append(city)
+    def remove_city(self, city):
+        if city in self.city:
+            self.cities.remove(city)
 class Player:
     """
     """
-    def __init__(self, name, high_score=0, nations=[]):
+    def __init__(self, name, high_score=0, nation=None):
         self.name = name
         self.high_score = high_score
-        self.nations = nations
-    def add_nation(self, nation):
-        if nation not in self.nations:
-            self.nations.append(nation)
-    def remove_nation(self, nation):
-        if nation in self.nations:
-            self.nations.remove(nation)
+        self._nation = nation
+        self.score = 0
+    @property
+    def nation(self):
+        return self._nation
+    @nation.setter
+    def nation(self, nation):
+        self._nation = nation
+        self.score =  self._nation.wealth
+
 class Game:
     """
     Logic wrapper for the overall game
     """
-    YES = "Y"
-    NO = "N"
-    YES_OR_NO = {YES:True,NO:False}
-    COMPUTER_NAME = "computer"
-    def __init__(self, first_player, second_player=COMPUTER_NAME, start_day=0):
-        self.first_player = first_player
-        self.second_player = second_player
+    END_GAME = 0
+    COMPUTER_NAME = "Computer"
+    def __init__(self, player_1, player_2=Player(COMPUTER_NAME), start_day=0):
+        self.player_1 = player_1
+        self.player_2 = player_2
+        if player_2.nation==None:
+            player_2.nation = Nation("Utopia")
         self.day = start_day
 
     def start(self):
@@ -66,33 +88,31 @@ class Game:
         print("The Game Begins!")
         still_playing = True
         while still_playing:
-            still_playing = Game.yes_or_no("Do you want to Continue?[Y/N] ")
             if still_playing:
-                print("Playing")
-            else:
-                self.save_game()
+                self.tick()
+            still_playing = self.next_action(enter_next_action("Enter next action: ", [0,1,2]))
+    def tick(self):
+         Display.game_screen(self,self.player_1,self.player_2)
+    def next_action(self, action):
+        if action == Game.END_GAME:
+            self.save_game()
+            return False
+        return True
     def save_game(self):
-        pass
+         pass
 
     def start_menu():
         """
         Prints out the Start Menu Screen to to player
         """
         print("Welcome to ASCII Civ")
-        new_game = Game.yes_or_no("Do you want to play a New Game?[Y/N] ")
+        new_game = yes_or_no("Do you want to play a New Game?[Y/N] ")
         if new_game:
             print("New Game")
         else:#TODO:check if previous game exists
             print("Last Saved Game")
         return new_game
-    def yes_or_no(message):
-        """
-        Helper Function that handles user input for yes or no questions
-        """
-        while True:
-            response = input(message)
-            if response==Game.YES or response==Game.NO:
-                return Game.YES_OR_NO[response]
+   
         
     def settings_menu(self):
         """
@@ -108,7 +128,9 @@ import sys
 def main(argv):
     new_game = Game.start_menu()
     if new_game: 
-        player = Player(input("What's your name? "))
+        player = Player(are_you_sure("What's your name? "))
+        nation_name = are_you_sure("What will you name your nation? ")
+        player.nation = Nation(nation_name,100)
         game = Game(player)
         game.start()
     else:
