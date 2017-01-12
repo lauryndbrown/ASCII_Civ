@@ -2,7 +2,7 @@ from player import Player
 from input_tools import *
 class Game:
     """
-    Logic wrapper for the overall game
+    Generic Abstract Game Class
     """
     END_GAME = 0
     COMPUTER_NAME = "Computer"
@@ -19,11 +19,15 @@ class Game:
         print("The Game Begins!")
         still_playing = True
         while still_playing:
-            if still_playing:
-                self.tick()
-            still_playing = self.next_action(enter_next_action("Enter next action: ", [0,1,2]))
+            still_playing = self.tick() 
+
     def tick(self):
-         self.display.game_screen(self,self.player_1,self.player_2)
+        """
+        MUST be extended to return some value for 
+        still_playing in start function
+        """
+        self.display.game_screen(self,self.player_1,self.player_2)
+
     def next_action(self, action):
         if action == Game.END_GAME:
             self.save_game()

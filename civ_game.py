@@ -4,10 +4,10 @@ ASCII art.
 
 Writen by Lauryn D. Brown 
 """
-from game_display import CivDisplay
 from input_tools import * 
 from ascii_game import Game
 from player import Player
+from civ_display import CivDisplay
 class Citizen:
     """
     
@@ -76,11 +76,16 @@ class CivPlayer(Player):
 class CivGame(Game):
     def __init__(self, display, player_1, player_2):
         super().__init__(display, player_1, player_2)
+        self.choices = [0,1,2]
     def next_action(self, action):
         if action == Game.END_GAME:
             self.save_game()
             return False
         return True
+    def tick(self):
+        super().tick()
+        return self.next_action(enter_next_action("Enter next action: ", self.choices))
+
 def create_new_game(display):
     #Get Names for Player 1
     player_1_name = are_you_sure("What's your name? ")
