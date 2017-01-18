@@ -1,6 +1,7 @@
+from abc import ABC, abstractmethod
 from player import Player
 from input_tools import *
-class Game:
+class Game(ABC):
     """
     Generic Abstract Game Class
     """
@@ -14,16 +15,18 @@ class Game:
 
     def start(self):
         """
-        Begin the Game
+        Plays the game. While still_playing is True keep playing.
+        Note that it calls abstract method self.tick(). 
         """
-        print("The Game Begins!")
+        print("The Game Begins!") #Should be done by display
         still_playing = True
         while still_playing:
             still_playing = self.tick() 
 
+    @abstractmethod
     def tick(self):
         """
-        MUST be extended to return some value for 
+        MUST be extended to return Boolean value for 
         still_playing in start function
         """
         self.display.game_screen(self,self.player_1,self.player_2)
@@ -33,6 +36,7 @@ class Game:
             self.save_game()
             return False
         return True
+
     def save_game(self):
          pass
 

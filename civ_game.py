@@ -1,13 +1,15 @@
 """
-Beginning as a Utopia-like Game with (hopefully) some clever
-ASCII art.
+Beginning as a Utopia-like Game with (hopefully) some clever ASCII art.
 
 Writen by Lauryn D. Brown 
 """
+import sys
+
 from input_tools import * 
 from ascii_game import Game
 from player import Player
 from civ_display import CivDisplay
+
 class Citizen:
     """
     
@@ -101,7 +103,7 @@ def create_new_game(display):
 def load_saved_game(display):
     #removed and actually write the function
     return create_new_game(display)
-import sys
+
 def main(argv):
     display = CivDisplay()
     is_new_game = display.start_menu()

@@ -14,6 +14,7 @@ class CivDisplay(Display):
         self.scores(game, player_1, player_2)
         self.board(player_1, player_2)
         self.in_game_menu()
+
     def scores(self, game, player_1, player_2):
         scores = str(player_1.name)+":"+str(player_1.score)
         scores+= self.TAB+str(player_2.name)+":"+str(player_2.score)
@@ -30,3 +31,5 @@ class CivDisplay(Display):
     def in_game_menu(self):
         print("Action[1]"+self.TAB+"Action[2]"+self.TAB+"End Game[0]")
           
+    def settings_menu(self):
+        print(Settings)

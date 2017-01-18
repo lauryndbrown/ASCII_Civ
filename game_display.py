@@ -1,10 +1,9 @@
+from PIL import Image
+from abc import ABC, abstractmethod
 from input_tools import *
-class Display:
+class Display(ABC):
+    @abstractmethod
     def game_screen(self, game, player_1, player_2):
-        pass
-    def scores(self, game, player_1, player_2):
-        pass
-    def board(self, player_1, player_2):
         pass
     def start_menu(self, welcome_str):
         """
@@ -17,4 +16,9 @@ class Display:
         else:
             print("Last Saved Game")
         return new_game
-
+    @abstractmethod
+    def settings_menu(self):
+        """
+        Prints the settings menu Screen to the player
+        """
+        pass
