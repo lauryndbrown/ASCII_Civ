@@ -39,15 +39,3 @@ class Game(ABC):
 
     def save_game(self):
          pass
-
-    def settings_menu(self):
-        """
-        Prints the settings menu Screen to the player
-        """
-        print("Settings Menu")
-    def game(self):
-        """
-        Prints the game 
-        """
-        print("Game")
-

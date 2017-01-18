@@ -62,6 +62,7 @@ class CivPlayer(Player):
     """
     DEFAULT_OPPONENT_NAME = "Flick" 
     DEFAULT_OPPONENT_NATION = "Utopia"
+
     def __init__(self, name, nation):
         self.name = name
         self._nation = nation
@@ -76,6 +77,7 @@ class CivPlayer(Player):
         self.score =  self._nation.wealth
 
 class CivGame(Game):
+    IMAGE_PATH = "Images/"
     def __init__(self, display, player_1, player_2):
         super().__init__(display, player_1, player_2)
         self.choices = [0,1,2]
@@ -83,6 +85,8 @@ class CivGame(Game):
         if action == Game.END_GAME:
             self.save_game()
             return False
+        if action == 1:
+            self.display.image_to_ascii(CivGame.IMAGE_PATH+"treasure-map.png")
         return True
     def tick(self):
         super().tick()

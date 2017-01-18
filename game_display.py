@@ -22,3 +22,9 @@ class Display(ABC):
         Prints the settings menu Screen to the player
         """
         pass
+    
+    def image_to_ascii(self, path):
+        """
+        """
+        image = Image.open(path)
+        image.show()
