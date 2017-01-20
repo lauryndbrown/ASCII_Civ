@@ -23,8 +23,5 @@ class Display(ABC):
         """
         pass
     
-    def image_to_ascii(self, path):
-        """
-        """
-        image = Image.open(path)
-        image.show()
+    
+ 
