@@ -21,7 +21,6 @@ class Display(ABC):
         """
         Prints the settings menu Screen to the player
         """
-        pass
-    
+        pass 
     
  
