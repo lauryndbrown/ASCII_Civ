@@ -19,13 +19,13 @@ class YourClass(ASCII_Game):
 ```
 Notice that a display is required to separate the game logic from the code printing to the terminal. You display should extend the Display class in game_display.py.  
 ###Image to ASCII Conversion
-The ASCII_Art Class located in `ascii_art.py` is an image converter that takes a PIL Image and converts it to ASCII characters that can then be printed to the screen. It can be used in isolation and has no dependencies with the rest of the project. Usage as shown:
+The ASCII_Art Class located in `ascii_art.py` is an image converter that takes a PIL Image and converts it to ASCII characters that can then be printed to the screen. Examples can be found in the ASCII_Examples folder of the project. It can be used in isolation and has no dependencies with the rest of the project. Usage as shown:
 ####Via Command Line
 The command line version assumes the characters `'#@%S?+:*,. '` to use as conversion.
 ```
 python ascii_art.py path\to\image
 ```
-####Adding to own Code
+####Adding to your own Code
 Pillow is a dependcy.
 ```
 from ascii_art.py import ASCII_ART
@@ -39,4 +39,4 @@ print(ascii_img)
 ```
 ##Image Sources
 treasureMap.png: https://pixabay.com/en/treasure-map-treasure-hunt-153425/
-
+flag.jpg: https://pixabay.com/en/flag-blow-wind-flutter-characters-75047/
