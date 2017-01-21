@@ -4,9 +4,10 @@ from abc import ABC, abstractmethod
 from input_tools import *
 class Display(ABC):
     CHARS = list('#@%S?+:*,. ')
-    def __init__(self):
+    def __init__(self, col_size=50):
         self.image_converter = ASCII_Art(self.CHARS)
         self.image_converter.invert_chars()
+        self.col_size=col_size
     @abstractmethod
     def game_screen(self, game, player_1, player_2):
         pass
