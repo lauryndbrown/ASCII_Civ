@@ -80,7 +80,7 @@ class CivPlayer(Player):
         self._nation = nation
         self.score =  self._nation.wealth
 class Choice:
-    def __init__(self, name, method, args):
+    def __init__(self, name, method, args, menu):
         self.name = name
         self.method = method
         #args should be a tuple
@@ -88,24 +88,41 @@ class Choice:
             self.args = ()
         else:
             self.args = args
-
+        self.menu = menu
+    def __str__(self):
+        return "Name:{} Method:{} Menu:{}".format(self.name,self.method,self.menu)
 
 class CivGame(Game):
     IMAGE_PATH = "Images/"
-    GAME_SCREEN = 1
-    SETTINGS_SCREEN = 2
-    NATION_SCREEN = 3
-    BUILD_SCREEN = 4
+    GAME_MENU = "Game"
+    SETTINGS_MENU = "Settings"
+    NATION_MENU = "Nation"
+    BUILD_MENU = "Build"
+    BACK_OPTION = "Back"
     def __init__(self, display, player_1, player_2):
         super().__init__(display, player_1, player_2)
-        self.choices = []
-        self.choices.append(Choice("End Game",self.end_game, None))
-        self.choices.append(Choice("Settings",self.display.settings_screen, (self,)))
-        self.choices.append(Choice("Nation Details",self.display.nation_screen, (self,)))
-        self.choices.append(Choice("Build",self.display.build_screen, (self,)))
+        game_menu = []
+        settings_menu = []
+        nation_menu = []
+        build_menu = []
+        game_menu.append(Choice("End Game",self.end_game, None, None))
+        game_menu.append(Choice("Settings",self.display.settings_screen, (self,), self.SETTINGS_MENU))
+        game_menu.append(Choice("Nation Details",self.display.nation_screen, (self,), self.NATION_MENU))
+        game_menu.append(Choice("Build",self.display.build_screen, (self,), self.BUILD_MENU))
+        settings_menu.append(Choice(self.BACK_OPTION,self.display.build_screen, (self,), self.GAME_MENU))
+        nation_menu.append(Choice(self.BACK_OPTION,self.display.build_screen, (self,), self.GAME_MENU))
+        build_menu.append(Choice(self.BACK_OPTION,self.display.build_screen, (self,), self.GAME_MENU))
+        self.menus = {self.GAME_MENU:game_menu, self.SETTINGS_MENU:settings_menu,self.NATION_MENU:nation_menu, self.BUILD_MENU:build_menu}
+
+
+        self.menu = game_menu
+        self.prev_menu = None
 
     def tick(self):
-        choice = enter_next_action("Enter next action: ", self.choices)
+        choice = enter_next_action("Enter next action: ", self.menu)
+        if choice.menu != None:
+            self.prev_menu = self.menu
+            self.menu = self.menus[choice.menu]
         choice.method(*tuple(choice.args))
         return choice.method!=self.end_game
 

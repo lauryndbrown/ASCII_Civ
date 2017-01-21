@@ -8,7 +8,7 @@ class CivDisplay(Display):
     TAB = "    "
     def __init__(self, col_size=50):
         super().__init__(col_size)
-        self.hr = "="*CivDisplay.HR_LENGTH
+        self.hr = ("="*CivDisplay.HR_LENGTH)+"\n"
 
     def start_menu(self):
         """
@@ -25,7 +25,7 @@ class CivDisplay(Display):
         print('\n')
         self._board(game.player_1, game.player_2)
         print('\n')
-        self._in_game_menu(game.choices)
+        self._in_game_menu(game.menu)
 
     def _scores(self, game):
         """
@@ -48,18 +48,18 @@ class CivDisplay(Display):
           
     def settings_screen(self, game):
         print(self.hr)
-        print('\n')
         print('Settings')
+        self._in_game_menu(game.menu)
         print('\n')
     def nation_screen(self, game):
         print(self.hr)
-        print('\n')
         print('Nations')
+        self._in_game_menu(game.menu)
         print('\n')
     def build_screen(self, game):
         print(self.hr)
-        print('\n')
         print('Build')
+        self._in_game_menu(game.menu)
         print('\n')
 
 if __name__=="__main__":
