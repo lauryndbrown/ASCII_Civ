@@ -4,32 +4,43 @@ class ASCII_Art:
     """
     Library to convert an image to ASCII
     """
-    def __init__(self, chars):
+    def __init__(self, chars, row_incr=3, col_incr=3):
         """
         Assumes chars is sorted from lightest to darkest value
         """
         self.chars = chars
-    def image_to_ascii(self, image):
+        self.row_incr = row_incr
+        self.col_incr = col_incr
+    def invert_chars(self):
+        """
+        Reverses the chars array so that the ascii values printed are inverted
+        """
+        self.chars.reverse()
+    def image_to_ascii(self, image, scaled_width=400):
         """
         Given an image converts to ASCII Art
         """
         image = self.to_greyscale(image)
-        image = self.scale_image(image)
+        image = self.scale_image(image, scaled_width)
         ascii_chars = self.pixels_to_ascii(image)
         return ''.join(ascii_chars)
-        #image.show()
 
-    def scale_image(self, image, width=100):
+    def scale_image(self, image, new_width):
         """
         Scales an image
         """
-        return image
+        width = image.size[0]
+        height = image.size[1]
+        ratio = height/width
+        new_height = int(ratio*new_width)
+        resized_img = image.resize((new_width, new_height))
+        return resized_img
     def to_greyscale(self, image):
         """
         Converts an image to greyscale
         """
         return image.convert('L')
-    def pixels_to_ascii(self, image, row_incr=4, col_incr=5):
+    def pixels_to_ascii(self, image):
         """
         Converts the individual pixels to ascii
         """
@@ -37,11 +48,11 @@ class ASCII_Art:
         #[self.char[pixel] for pixel in image.getdata()]
         row = 0
         col = 0
-        height, width = image.size
-        for row in range(0, height, row_incr):
-            for col in range(0, width, col_incr):
-                row_end = row+row_incr
-                col_end = col+col_incr
+        width, height = image.size
+        for row in range(0, height, self.row_incr):
+            for col in range(0, width, self.col_incr):
+                row_end = row+self.row_incr
+                col_end = col+self.col_incr
                 if row_end>=height:
                     row_end = height-1
                 if col_end>=width:
@@ -59,33 +70,22 @@ class ASCII_Art:
             Returns a block of pixels
             """
             pixel_block = []
-            for x in range(row_start, row_end):
-                for y in range(col_start, col_end):
-                    try:
-                        pixel_block.append(image.getpixel((x,y)))
-                    except: 
-                        print("X:"+str(x)+" Y:"+str(y))
-                        print("Width:"+str(image.size[0])+" Height:"+str(image.size[1]))
-                        image.show()
-                        exit(1)
+            for row in range(row_start, row_end):
+                for col in range(col_start, col_end):
+                        pixel_block.append(image.getpixel((col,row)))
             return pixel_block
         def calc_avg_pixel(pixels):
             """
             Given: a list of greyscale pixels
             Return: Calcuted pixel average (rounded)
             """
+            if len(pixels)==0:
+                return 0
             total= 0
             for pixel in pixels:
                 total+=pixel
-            if total==0:
-                return 0
             return int(total/len(pixels))
         pixel_block = get_pixel_block(image, row_start, row_end, col_start, col_end)
-       # print("Row - Start:"+str(row_start)+" End:"+str(row_end))
-       # print("Col - Start:"+str(col_start)+" End:"+str(col_end))
-       # print("Width:"+str(image.size[0])+" Height:"+str(image.size[1]))
-       # print(str(pixel_block))
-       # print()
         avg_pixel = calc_avg_pixel(pixel_block)
         return self.pixel_to_ascii(avg_pixel)
     def pixel_to_ascii(self, pixel):
@@ -93,14 +93,14 @@ class ASCII_Art:
         Return ascii value for a given pixel
         """
         #pixel/Max_Pixel
-        pixel_index = int(pixel/255)
         #Multiplied by the number of characters
-        pixel_index *=len(self.chars)-1 
         #You would also add the min possible pixel if it were not zero
+        pixel_index = int(pixel/255*(len(self.chars)-1))
         return self.chars[pixel_index]
 if __name__=="__main__":
-    chars = list('.,*:+?S%@#')
-    img_converter = ASCII_Art(chars)
+    chars = list('#@%S?+:*,. ')
     image = Image.open(sys.argv[1])
+    img_converter = ASCII_Art(chars)
+    img_converter.invert_chars()
     ascii_img = img_converter.image_to_ascii(image)
     print(ascii_img)
