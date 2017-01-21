@@ -18,15 +18,17 @@ def are_you_sure(message):
         certain = yes_or_no("Are you sure "+response+" is ok?")
         if certain==True:
             return response
-def enter_next_action(message, choices, should_confirm=False):
+def enter_next_action(message, choices, display, should_confirm=False):
     """
     Helper Function that handles user input for Controls
     """
+    response = input(message)
     while True:
-        response = input(message)
         if response.isdigit():
             response = int(response)
         if response in range(len(choices)):
             if should_confirm:
                 response = are_you_sure(message)
             return choices[response]
+        display.reset()
+        response = input(message)

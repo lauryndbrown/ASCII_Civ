@@ -6,7 +6,7 @@ Writen by Lauryn D. Brown
 import sys
 
 from input_tools import * 
-from ascii_game import Game
+from ascii_game import Game, Choice
 from player import Player
 from civ_display import CivDisplay
 
@@ -79,18 +79,6 @@ class CivPlayer(Player):
     def nation(self, nation):
         self._nation = nation
         self.score =  self._nation.wealth
-class Choice:
-    def __init__(self, name, method, args, menu):
-        self.name = name
-        self.method = method
-        #args should be a tuple
-        if args==None:
-            self.args = ()
-        else:
-            self.args = args
-        self.menu = menu
-    def __str__(self):
-        return "Name:{} Method:{} Menu:{}".format(self.name,self.method,self.menu)
 
 class CivGame(Game):
     IMAGE_PATH = "Images/"
@@ -109,22 +97,17 @@ class CivGame(Game):
         game_menu.append(Choice("Settings",self.display.settings_screen, (self,), self.SETTINGS_MENU))
         game_menu.append(Choice("Nation Details",self.display.nation_screen, (self,), self.NATION_MENU))
         game_menu.append(Choice("Build",self.display.build_screen, (self,), self.BUILD_MENU))
-        settings_menu.append(Choice(self.BACK_OPTION,self.display.build_screen, (self,), self.GAME_MENU))
-        nation_menu.append(Choice(self.BACK_OPTION,self.display.build_screen, (self,), self.GAME_MENU))
-        build_menu.append(Choice(self.BACK_OPTION,self.display.build_screen, (self,), self.GAME_MENU))
+        settings_menu.append(Choice(self.BACK_OPTION,self.display.game_screen, (self,), self.GAME_MENU))
+        nation_menu.append(Choice(self.BACK_OPTION,self.display.game_screen, (self,), self.GAME_MENU))
+        build_menu.append(Choice(self.BACK_OPTION,self.display.game_screen, (self,), self.GAME_MENU))
         self.menus = {self.GAME_MENU:game_menu, self.SETTINGS_MENU:settings_menu,self.NATION_MENU:nation_menu, self.BUILD_MENU:build_menu}
 
 
         self.menu = game_menu
         self.prev_menu = None
+        self.day = 0
 
-    def tick(self):
-        choice = enter_next_action("Enter next action: ", self.menu)
-        if choice.menu != None:
-            self.prev_menu = self.menu
-            self.menu = self.menus[choice.menu]
-        choice.method(*tuple(choice.args))
-        return choice.method!=self.end_game
+    
 
     def end_game(self):
         pass
@@ -154,13 +137,14 @@ def main(argv):
     game.start()
     print("End Game")
 if __name__=="__main__":
-   # main(sys.argv)
-   nation1 = Nation("Nation1")
-   nation2 = Nation("Nation2")
-   player1 = CivPlayer("Player1", nation1)
-   player2 = CivPlayer("Player2",nation2)
-   
-   display = CivDisplay()
-   game = CivGame(display,player1,player2)
-   game.start()
+    if sys.argv[1]=='Y':
+        main(sys.argv)
+    else:
+        nation1 = Nation("Nation1")
+        nation2 = Nation("Nation2")
+        player1 = CivPlayer("Player1", nation1)
+        player2 = CivPlayer("Player2",nation2)
+        display = CivDisplay()
+        game = CivGame(display,player1,player2)
+        game.start()
 
