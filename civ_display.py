@@ -1,3 +1,5 @@
+from ascii_art import ASCII_Art 
+from PIL import Image
 from game_display import Display
 from input_tools import *
 from subprocess import call
@@ -11,7 +13,9 @@ class CivDisplay(Display):
     HR_BOLD = "="
     HR_DASHED = '-'
     HR_LIGHT = '_'
-    
+    IMAGES = "Images\\"    
+    #CHARS = list(' .,*:+?S%@#')
+    CHARS = list('#@%S?+:*,. ')
     TITLE_OFFSET = 1
     IN_GAME_MENU_OFFSET = 3
     GAME_SCREEN_OFFSET = 5 + TITLE_OFFSET + IN_GAME_MENU_OFFSET 
@@ -21,15 +25,26 @@ class CivDisplay(Display):
 
     def __init__(self, col_size=50):
         super().__init__(col_size)
-        self.hr = '='
         self.last_screen_method = None
+        self.img_converter = ASCII_Art(self.CHARS)
 
 
     def start_menu(self):
         """
         Displays Welcome Message when Game Starts
         """
-        super().start_menu("Welcome to ASCII Civ")
+        image = Image.open(self.IMAGES+"title.png")
+        #image = Image.open(self.IMAGES+"hack.png")
+        #image = self.img_converter.to_greyscale(image)
+        #image = image.resize((300,75))
+       # image.thumbnail((image.size[0],75))
+       # image.show()
+        #self.img_converter.invert_chars() 
+        #ascii_img = ''.join(self.img_converter.pixels_to_ascii(image))
+        ascii_img = self.img_converter.image_to_ascii(image, 300)[:-1]
+        print(ascii_img, end="")
+        exit()
+        super().start_menu()
         self.last_menu = (self.start_menu, ())
 
     def game_screen(self, game):

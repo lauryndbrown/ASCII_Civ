@@ -11,11 +11,10 @@ class Display(ABC):
     @abstractmethod
     def game_screen(self, game, player_1, player_2):
         pass
-    def start_menu(self, welcome_str):
+    def start_menu(self):
         """
         Prints out the Start Menu Screen to to player
         """
-        print(welcome_str)
         new_game = yes_or_no("Do you want to play a New Game?[Y/N] ")
         if new_game:
             print("New Game")
