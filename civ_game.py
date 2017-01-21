@@ -12,7 +12,7 @@ from civ_display import CivDisplay
 
 class Citizen:
     """
-    
+    Class representing people in a city    
     """
     def __init__(self, nation, happiness, health):
         self.nation = nation
@@ -20,12 +20,14 @@ class Citizen:
         self.health = health
 class Building:
     """
+    Class representing buildings in a city
     """
     def __init__(self, name, building_type):
         self.name = name
         self.building_type = building_type
 class City:
     """
+    Class representing cities
     """
     def __init__(self, name, citizens=[], buildings=[]):
         self.name = name
@@ -45,6 +47,7 @@ class City:
             self.buildings.remove(building)
 class Nation:
     """
+    Class representing Nations 
     """
     def __init__(self, name, wealth=100, cities=[]):
         self.name = name
@@ -81,18 +84,27 @@ class CivPlayer(Player):
         self.score =  self._nation.wealth
 
 class CivGame(Game):
-    IMAGE_PATH = "Images/"
+    """
+    Game Class Specific to the Civilization Game
+    """
+    #Menu Names
     GAME_MENU = "Game"
     SETTINGS_MENU = "Settings"
     NATION_MENU = "Nation"
     BUILD_MENU = "Build"
+    #Option Names
     BACK_OPTION = "Back"
     def __init__(self, display, player_1, player_2):
+        """
+        Initializes the CivGame class 
+        Builds the Game Menus
+        """
         super().__init__(display, player_1, player_2)
         game_menu = []
         settings_menu = []
         nation_menu = []
         build_menu = []
+        #Build Menus
         game_menu.append(Choice("End Game",self.end_game, None, None))
         game_menu.append(Choice("Settings",self.display.settings_screen, (self,), self.SETTINGS_MENU))
         game_menu.append(Choice("Nation Details",self.display.nation_screen, (self,), self.NATION_MENU))
@@ -101,17 +113,22 @@ class CivGame(Game):
         nation_menu.append(Choice(self.BACK_OPTION,self.display.game_screen, (self,), self.GAME_MENU))
         build_menu.append(Choice(self.BACK_OPTION,self.display.game_screen, (self,), self.GAME_MENU))
         self.menus = {self.GAME_MENU:game_menu, self.SETTINGS_MENU:settings_menu,self.NATION_MENU:nation_menu, self.BUILD_MENU:build_menu}
-
-
+    
+        #Current game menu is pointed to by self.menu
         self.menu = game_menu
+        #Because the game has just started the previous menu is None
         self.prev_menu = None
         self.day = 0
-
-    
-
     def end_game(self):
+        """
+        Method Called when the game ends
+        """
         pass
 def create_new_game(display):
+    """
+    Creates a New CivGame complete with the players
+    Prompts the user to name their Player and their Nation
+    """
     #Get Names for Player 1
     player_1_name = are_you_sure("What's your name? ")
     nation_1_name = are_you_sure("What will you name your nation? ")
@@ -124,10 +141,16 @@ def create_new_game(display):
     #Create Game
     return CivGame(display, player_1, player_2)
 def load_saved_game(display):
+    """
+    Loads Saved Game from File
+    """
     #removed and actually write the function
     return create_new_game(display)
 
 def main(argv):
+    """
+    Plays the Game complete with the introduction
+    """
     display = CivDisplay()
     is_new_game = display.start_menu()
     if is_new_game: 
@@ -137,6 +160,9 @@ def main(argv):
     game.start()
 if __name__=="__main__":
     if len(sys.argv)>1 and sys.argv[1]=='N':
+        """
+        Plays the game no introduction
+        """
         nation1 = Nation("Nation1")
         nation2 = Nation("Nation2")
         player1 = CivPlayer("Player1", nation1)

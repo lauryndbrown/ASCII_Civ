@@ -8,13 +8,14 @@ class CivDisplay(Display):
     """
     ASCII Art for game
     """
-    HR_LENGTH = 100
-    TAB = "    "
+    #Commonly Used characters for Horizontal Rule
     HR_BOLD = "="
     HR_DASHED = '-'
     HR_LIGHT = '_'
+    #Images Directory
     IMAGES = "Images\\"    
     CHARS = list('#@%S?+:*,. ')
+    #Offsets used to determine the whitespace needed to fill the screen
     TITLE_OFFSET = 3
     IN_GAME_MENU_OFFSET = 4
     GAME_SCREEN_OFFSET = 6 + TITLE_OFFSET + IN_GAME_MENU_OFFSET 
@@ -78,6 +79,9 @@ class CivDisplay(Display):
         print("{:10} {:{col}} {:{col}}".format("Cities: ", str(len(player_2.nation.cities)), str(len(player_2.nation.cities)), col=self.col_size)) 
 
     def _in_game_menu(self, choices):
+        """
+        Private method to display the in-game menu choices
+        """
         menu_str = ""
         for index in range(len(choices)):
             choice_str = "{}[{}]".format(choices[index].name,index)
@@ -87,6 +91,9 @@ class CivDisplay(Display):
 
           
     def settings_screen(self, game):
+        """
+        Settings Screen
+        """
         self.clear_screen()
         print(self.center("SETTINGS", self.HR_BOLD))
         self.fill_screen(self.SETTINGS_SCREEN_OFFSET)
@@ -94,6 +101,9 @@ class CivDisplay(Display):
         self.last_menu = (self.settings_screen, (game,))
 
     def nation_screen(self, game):
+        """
+        Nation Details Screen
+        """
         self.clear_screen()
         print(self.center("NATION DETAILS", self.HR_BOLD))
         self.fill_screen(self.NATION_SCREEN_OFFSET)
@@ -101,23 +111,35 @@ class CivDisplay(Display):
         self.last_menu = (self.nation_screen, (game,))
 
     def build_screen(self, game):
+        """
+        Build Screen
+        """
         self.clear_screen()
         print(self.center("BUILD", self.HR_BOLD))
         self.fill_screen(self.BUILD_SCREEN_OFFSET)
         self._in_game_menu(game.menu)
         self.last_menu = (self.build_screen, (game,))
     def end_game(self):
+        """
+        Message shown when the game exits
+        """
         print("End Game")
 
     def center(self, message, border, size=os.get_terminal_size().columns):
-            return message.center(size, border)
+        """
+        Returns a string with message centered between characters of a given border
+        """
+        return message.center(size, border)
     
-    def center_indent(self, message, size=os.get_terminal_size().columns/2):
-            return "{:{size}}".format(message, size=size)
-
     def format_HR(self, border, size=os.get_terminal_size().columns-1):
+        """
+        Returns a Horizontal Rule of length size
+        """
         return border*size
     def clear_screen(self):
+        """
+        Clears the Screen
+        """
         print()
         call(["clear"])
     def fill_screen(self, offset):

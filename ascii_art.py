@@ -6,9 +6,12 @@ class ASCII_Art:
     """
     def __init__(self, chars, row_incr=3, col_incr=3):
         """
+        Initializes ASCII Art Image Converter
         Assumes chars is sorted from lightest to darkest value
         """
         self.chars = chars
+        #row_incr and col_incr refer to the size of the blocks of pixels that are averaged together
+        #for many images the defaults suffice, but edit for different resolutions
         self.row_incr = row_incr
         self.col_incr = col_incr
     def invert_chars(self):
@@ -62,7 +65,7 @@ class ASCII_Art:
         return ascii_img
     def convert_pixel_block(self, image, row_start, row_end, col_start, col_end):
         """
-
+        Converts the average value of a block of pixels to a single ascii characher 
         """
         def get_pixel_block(image, row_start, row_end, col_start, col_end ):
             """

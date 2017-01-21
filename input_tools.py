@@ -1,3 +1,6 @@
+"""
+User Input Tools for the ASCII Game Class 
+"""
 YES = "Y"
 NO = "N"
 YES_OR_NO = {YES:True,NO:False}

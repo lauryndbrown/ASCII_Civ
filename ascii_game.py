@@ -2,14 +2,23 @@ from abc import ABC, abstractmethod
 from player import Player
 from input_tools import *
 class Choice:
+    """
+    Class representing the choices that the user sees on the screen coupling it with the corresponding functionality.
+    """
     def __init__(self, name, method, args, menu):
+        """
+        Initializes Choice
+        """
         self.name = name
+        #Method should be a method that is invoked when the choice is requested by the user
         self.method = method
         #args should be a tuple
         if args==None:
             self.args = ()
         else:
             self.args = args
+        #Menu is the menu that the choice requires when the game moves to the appropriate screen
+        #If it's None, no changes are necessary
         self.menu = menu
     def __str__(self):
         return "Name:{} Method:{} Menu:{}".format(self.name,self.method,self.menu)
@@ -30,7 +39,7 @@ class Game(ABC):
     def start(self):
         """
         Plays the game. While still_playing is True keep playing.
-        Note that it calls abstract method self.tick(). 
+        Note that it calls self.tick(). 
         """
         print("The Game Begins!") #Should be done by display
         self.display.game_screen(self)
@@ -39,19 +48,21 @@ class Game(ABC):
             still_playing = self.tick() 
 
     def tick(self):
+        """
+        Invokes the game's logic.
+        Returns False if the user has requested to end the game. True otherwise.
+        """
         choice = enter_next_action("Enter next action: ", self.menu, self.display)
         if choice.menu != None:
             self.prev_menu = self.menu
             self.menu = self.menus[choice.menu]
+        #calls the appropriate method for choice 
         choice.method(*tuple(choice.args))
         return choice.method!=self.end_game
 
-    def next_action(self, action):
-        if action == Game.END_GAME:
-            self.save_game()
-            return False
-        return True
-
     def save_game(self):
+        """
+        Saves the game to be reloaded at a future time
+        """
          pass
 
