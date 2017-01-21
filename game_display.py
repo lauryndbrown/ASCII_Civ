@@ -4,6 +4,9 @@ from abc import ABC, abstractmethod
 from input_tools import *
 class Display(ABC):
     CHARS = list('#@%S?+:*,. ')
+    def __init__(self):
+        self.image_converter = ASCII_Art(self.CHARS)
+        self.image_converter.invert_chars()
     @abstractmethod
     def game_screen(self, game, player_1, player_2):
         pass
@@ -33,7 +36,5 @@ class Display(ABC):
         except:
             print("Could not find image at "+path)
             exit(1)
-        image_converter = ASCII_Art(self.CHARS)
-        image_converter.invert_chars()
-        ascii_image = image_converter.image_to_ascii(image)
+        ascii_image = self.image_converter.image_to_ascii(image)
         print(ascii_image)
