@@ -29,7 +29,7 @@ class Game(ABC):
         MUST be extended to return Boolean value for 
         still_playing in start function
         """
-        self.display.game_screen(self,self.player_1,self.player_2)
+        self.display.game_screen(self)
 
     def next_action(self, action):
         if action == Game.END_GAME:

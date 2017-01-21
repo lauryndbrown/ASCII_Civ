@@ -84,7 +84,7 @@ class CivGame(Game):
     IMAGE_PATH = "Images/"
     def __init__(self, display, player_1, player_2):
         super().__init__(display, player_1, player_2)
-        self.choices = [0,1,2]
+        self.choices =[(0,"End Game"), (1,"Settings"), (2,"Nation Detail"),(3,"Build")] 
     def next_action(self, action):
         if action == Game.END_GAME:
             self.save_game()

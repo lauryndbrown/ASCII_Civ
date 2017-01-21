@@ -4,33 +4,47 @@ class CivDisplay(Display):
     """
     ASCII Art for game
     """
-    HR ="======================"
+    HR_LENGTH = 100
     TAB = "    "
+    def __init__(self, col_size=50):
+        super().__init__(col_size)
+        self.hr = "="*CivDisplay.HR_LENGTH
 
     def start_menu(self):
+        """
+        Displays Welcome Message when Game Starts
+        """
         super().start_menu("Welcome to ASCII Civ")
 
-    def game_screen(self, game, player_1, player_2):
-        self.scores(game, player_1, player_2)
-        self.board(player_1, player_2)
-        self.in_game_menu()
+    def game_screen(self, game):
+        """
+        Displays all information to the screen during a game
+        """
+        print(self.hr)
+        self._scores(game)
+        print('\n')
+        self._board(game.player_1, game.player_2)
+        print('\n')
+        self._in_game_menu(game.choices)
 
-    def scores(self, game, player_1, player_2):
-        scores = str(player_1.name)+":"+str(player_1.score)
-        scores+= self.TAB+str(player_2.name)+":"+str(player_2.score)
-        print(self.HR)
+    def _scores(self, game):
+        """
+        Private method to display player scores
+        """
         print("Day: "+str(game.day))
-        print(scores)
-        print('')
+        print("{:10} {:{col}} {:{col}}".format("Player: ", game.player_1.name, game.player_2.name, col=self.col_size)) 
+        print("{:10} {:{col}} {:{col}}".format("Nation: ",game.player_1.nation.name, game.player_2.nation.name, col=self.col_size)) 
+        print("{:10} {:{col}} {:{col}}".format("Wealth: ", str(game.player_2.nation.wealth), str(game.player_2.nation.wealth), col=self.col_size)) 
 
-    def board(self, player_1, player_2):
-        print("{:10} {:{col}} {:{col}}".format("Player: ", player_1.name, player_2.name, col=self.col_size)) 
-        print("{:10} {:{col}} {:{col}}".format("Nation: ",player_1.nation.name, player_2.nation.name, col=self.col_size)) 
-        print("{:10} {:{col}} {:{col}}".format("Wealth: ", str(player_2.nation.wealth), str(player_2.nation.wealth), col=self.col_size)) 
+    def _board(self, player_1, player_2):
         print("{:10} {:{col}} {:{col}}".format("Cities: ", str(len(player_2.nation.cities)), str(len(player_2.nation.cities)), col=self.col_size)) 
 
-    def in_game_menu(self):
-        print("Action[1]"+self.TAB+"Action[2]"+self.TAB+"End Game[0]")
+    def _in_game_menu(self, choices):
+        menu_str = ""
+        for choice in choices:
+            choice_str = "{}[{}]".format(choice[1],choice[0])
+            menu_str+="{}     ".format(choice_str)
+        print(menu_str)
           
     def settings_menu(self):
         print(Settings)
@@ -42,4 +56,6 @@ if __name__=="__main__":
    player2 = CivPlayer("Player2",nation2)
    
    display = CivDisplay()
-   display.board(player1, player2)
+   game = CivGame(display,player1,player2)
+
+   display.game_screen(game)
