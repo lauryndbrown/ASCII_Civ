@@ -16,16 +16,16 @@ class ASCII_Art:
         Reverses the chars array so that the ascii values printed are inverted
         """
         self.chars.reverse()
-    def image_to_ascii(self, image, scaled_size=400, scale_width=False):
+    def image_to_ascii(self, image, scaled_size=400):
         """
         Given an image converts to ASCII Art
         """
         image = self.to_greyscale(image)
-        image = self.scale_image_width(image, scaled_size)
+        image = self.scale_image(image, scaled_size)
         ascii_chars = self.pixels_to_ascii(image)
         return ''.join(ascii_chars)
 
-    def scale_image_width(self, image, new_width):
+    def scale_image(self, image, new_width):
         """
         Scales an image
         """
@@ -34,18 +34,6 @@ class ASCII_Art:
         ratio = height/width
         new_height = int(ratio*new_width)
         resized_img = image.resize((new_width, new_height))
-        return resized_img
-    def scale_image_height(self, image, new_height):
-        """
-        Scales an image given a set height
-        """
-        image.thumbnail((new_height, new_height))
-        resized_img = image
-        #width = image.size[0]
-        #height = image.size[1]
-        #ratio = height/width
-        #new_width = int(ratio*height)
-        #resized_img = image.resize((new_width, new_height))
         return resized_img
     def to_greyscale(self, image):
         """

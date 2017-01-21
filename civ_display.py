@@ -14,11 +14,10 @@ class CivDisplay(Display):
     HR_DASHED = '-'
     HR_LIGHT = '_'
     IMAGES = "Images\\"    
-    #CHARS = list(' .,*:+?S%@#')
     CHARS = list('#@%S?+:*,. ')
-    TITLE_OFFSET = 1
-    IN_GAME_MENU_OFFSET = 3
-    GAME_SCREEN_OFFSET = 5 + TITLE_OFFSET + IN_GAME_MENU_OFFSET 
+    TITLE_OFFSET = 3
+    IN_GAME_MENU_OFFSET = 4
+    GAME_SCREEN_OFFSET = 6 + TITLE_OFFSET + IN_GAME_MENU_OFFSET 
     SETTINGS_SCREEN_OFFSET = 0 + TITLE_OFFSET + IN_GAME_MENU_OFFSET
     NATION_SCREEN_OFFSET = 0 + TITLE_OFFSET + IN_GAME_MENU_OFFSET
     BUILD_SCREEN_OFFSET = 0 + TITLE_OFFSET + IN_GAME_MENU_OFFSET
@@ -34,17 +33,17 @@ class CivDisplay(Display):
         Displays Welcome Message when Game Starts
         """
         image = Image.open(self.IMAGES+"title.png")
-        #image = Image.open(self.IMAGES+"hack.png")
-        #image = self.img_converter.to_greyscale(image)
-        #image = image.resize((300,75))
-       # image.thumbnail((image.size[0],75))
-       # image.show()
-        #self.img_converter.invert_chars() 
-        #ascii_img = ''.join(self.img_converter.pixels_to_ascii(image))
-        ascii_img = self.img_converter.image_to_ascii(image, 300)[:-1]
+        ascii_img = self.img_converter.image_to_ascii(image, 300)
+        print(self.center("ASCII CIV", self.HR_BOLD))
         print(ascii_img, end="")
-        exit()
-        super().start_menu()
+        print(self.format_HR(' '))
+        message = self.format_HR(' ', int(os.get_terminal_size().columns/4))+"Do you want to play a New Game?[Y/N] "
+        new_game = yes_or_no(message)
+        if new_game:
+            print("New Game")
+        else:
+            print("Last Saved Game")
+        return new_game
         self.last_menu = (self.start_menu, ())
 
     def game_screen(self, game):
@@ -52,7 +51,7 @@ class CivDisplay(Display):
         Displays all information to the screen during a game
         """
         self.clear_screen()
-        self.print_title("ASCII CIV", self.HR_BOLD)
+        print(self.center("ASCII CIV", self.HR_BOLD))
         self._scores(game)
         self._board(game.player_1, game.player_2)
         self.fill_screen(self.GAME_SCREEN_OFFSET)
@@ -69,7 +68,7 @@ class CivDisplay(Display):
         """
         Private method to display player scores
         """
-        self.print_title("Day "+str(game.day), ' ')
+        print(self.center("Day "+str(game.day), ' '))
         print("{:10} {:{col}} {:{col}}".format("Player: ", game.player_1.name, game.player_2.name, col=self.col_size)) 
         print("{:10} {:{col}} {:{col}}".format("Nation: ",game.player_1.nation.name, game.player_2.nation.name, col=self.col_size)) 
         print("{:10} {:{col}} {:{col}}".format("Wealth: ", str(game.player_2.nation.wealth), str(game.player_2.nation.wealth), col=self.col_size)) 
@@ -82,37 +81,41 @@ class CivDisplay(Display):
         for index in range(len(choices)):
             choice_str = "{}[{}]".format(choices[index].name,index)
             menu_str+="{}     ".format(choice_str)
-        self.print_title("Menu", self.HR_DASHED)
-        self.print_title(menu_str, ' ')
+        print(self.center("Menu", self.HR_DASHED))
+        print(self.center(menu_str, ' '))
 
           
     def settings_screen(self, game):
         self.clear_screen()
-        self.print_title("SETTINGS", self.HR_BOLD)
+        print(self.center("SETTINGS", self.HR_BOLD))
         self.fill_screen(self.SETTINGS_SCREEN_OFFSET)
         self._in_game_menu(game.menu)
         self.last_menu = (self.settings_screen, (game,))
 
     def nation_screen(self, game):
         self.clear_screen()
-        self.print_title("NATION DETAILS", self.HR_BOLD)
+        print(self.center("NATION DETAILS", self.HR_BOLD))
         self.fill_screen(self.NATION_SCREEN_OFFSET)
         self._in_game_menu(game.menu)
         self.last_menu = (self.nation_screen, (game,))
 
     def build_screen(self, game):
         self.clear_screen()
-        self.print_title("BUILD", self.HR_BOLD)
+        print(self.center("BUILD", self.HR_BOLD))
         self.fill_screen(self.BUILD_SCREEN_OFFSET)
         self._in_game_menu(game.menu)
         self.last_menu = (self.build_screen, (game,))
 
-    def print_title(self, title, border, size=os.get_terminal_size().columns):
-            print(title.center(size, border), end="")
+    def center(self, message, border, size=os.get_terminal_size().columns):
+            return message.center(size, border)
+    
+    def center_indent(self, message, size=os.get_terminal_size().columns/2):
+            return "{:{size}}".format(message, size=size)
 
-    def print_HR(self, border, size=os.get_terminal_size().columns-1):
-        print(border*size)
+    def format_HR(self, border, size=os.get_terminal_size().columns-1):
+        return border*size
     def clear_screen(self):
+        print()
         call(["clear"])
     def fill_screen(self, offset):
         """
