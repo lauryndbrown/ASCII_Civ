@@ -135,11 +135,8 @@ def main(argv):
     else:
         game = load_saved_game(display)
     game.start()
-    print("End Game")
 if __name__=="__main__":
-    if sys.argv[1]=='Y':
-        main(sys.argv)
-    else:
+    if len(sys.argv)>1 and sys.argv[1]=='N':
         nation1 = Nation("Nation1")
         nation2 = Nation("Nation2")
         player1 = CivPlayer("Player1", nation1)
@@ -147,4 +144,6 @@ if __name__=="__main__":
         display = CivDisplay()
         game = CivGame(display,player1,player2)
         game.start()
+    else:
+        main(sys.argv)
 

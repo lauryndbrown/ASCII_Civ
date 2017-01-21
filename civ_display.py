@@ -42,7 +42,8 @@ class CivDisplay(Display):
         if new_game:
             print("New Game")
         else:
-            print("Last Saved Game")
+            print("Feature not Yet Implemented. Creating New Game")
+            #print("Last Saved Game")
         return new_game
         self.last_menu = (self.start_menu, ())
 
@@ -105,6 +106,8 @@ class CivDisplay(Display):
         self.fill_screen(self.BUILD_SCREEN_OFFSET)
         self._in_game_menu(game.menu)
         self.last_menu = (self.build_screen, (game,))
+    def end_game(self):
+        print("End Game")
 
     def center(self, message, border, size=os.get_terminal_size().columns):
             return message.center(size, border)
