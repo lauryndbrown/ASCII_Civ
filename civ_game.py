@@ -56,6 +56,10 @@ class Nation:
     def remove_city(self, city):
         if city in self.city:
             self.cities.remove(city)
+    def cities_names(self):
+        return [city.name for city in self.cities]
+    def __str__(self):
+        return "Name: "+self.name+" Wealth:"+str(self.wealth)+"\nCities:"+str(self.cities_names())
 class CivPlayer(Player):
     """
     Player specific to the CivGame class
