@@ -79,23 +79,38 @@ class CivPlayer(Player):
     def nation(self, nation):
         self._nation = nation
         self.score =  self._nation.wealth
+class Choice:
+    def __init__(self, name, method, args):
+        self.name = name
+        self.method = method
+        #args should be a tuple
+        if args==None:
+            self.args = ()
+        else:
+            self.args = args
+
 
 class CivGame(Game):
     IMAGE_PATH = "Images/"
+    GAME_SCREEN = 1
+    SETTINGS_SCREEN = 2
+    NATION_SCREEN = 3
+    BUILD_SCREEN = 4
     def __init__(self, display, player_1, player_2):
         super().__init__(display, player_1, player_2)
-        self.choices =[(0,"End Game"), (1,"Settings"), (2,"Nation Detail"),(3,"Build")] 
-    def next_action(self, action):
-        if action == Game.END_GAME:
-            self.save_game()
-            return False
-        if action == 1:
-            self.display.image_to_ascii(CivGame.IMAGE_PATH+"treasure-map.png")
-        return True
-    def tick(self):
-        super().tick()
-        return self.next_action(enter_next_action("Enter next action: ", self.choices))
+        self.choices = []
+        self.choices.append(Choice("End Game",self.end_game, None))
+        self.choices.append(Choice("Settings",self.display.settings_screen, (self,)))
+        self.choices.append(Choice("Nation Details",self.display.nation_screen, (self,)))
+        self.choices.append(Choice("Build",self.display.build_screen, (self,)))
 
+    def tick(self):
+        choice = enter_next_action("Enter next action: ", self.choices)
+        choice.method(*tuple(choice.args))
+        return choice.method!=self.end_game
+
+    def end_game(self):
+        pass
 def create_new_game(display):
     #Get Names for Player 1
     player_1_name = are_you_sure("What's your name? ")
@@ -122,5 +137,13 @@ def main(argv):
     game.start()
     print("End Game")
 if __name__=="__main__":
-    main(sys.argv)
+   # main(sys.argv)
+   nation1 = Nation("Nation1")
+   nation2 = Nation("Nation2")
+   player1 = CivPlayer("Player1", nation1)
+   player2 = CivPlayer("Player2",nation2)
+   
+   display = CivDisplay()
+   game = CivGame(display,player1,player2)
+   game.start()
 

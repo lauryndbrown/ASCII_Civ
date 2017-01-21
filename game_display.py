@@ -22,12 +22,6 @@ class Display(ABC):
         else:
             print("Last Saved Game")
         return new_game
-    @abstractmethod
-    def settings_menu(self):
-        """
-        Prints the settings menu Screen to the player
-        """
-        pass
     
     def image_to_ascii(self, path):
         """

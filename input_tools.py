@@ -26,7 +26,7 @@ def enter_next_action(message, choices, should_confirm=False):
         response = input(message)
         if response.isdigit():
             response = int(response)
-        if response in choices:
+        if response in range(len(choices)):
             if should_confirm:
                 response = are_you_sure(message)
-            return response
+            return choices[response]

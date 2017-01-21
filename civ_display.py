@@ -41,13 +41,27 @@ class CivDisplay(Display):
 
     def _in_game_menu(self, choices):
         menu_str = ""
-        for choice in choices:
-            choice_str = "{}[{}]".format(choice[1],choice[0])
+        for index in range(len(choices)):
+            choice_str = "{}[{}]".format(choices[index].name,index)
             menu_str+="{}     ".format(choice_str)
         print(menu_str)
           
-    def settings_menu(self):
-        print(Settings)
+    def settings_screen(self, game):
+        print(self.hr)
+        print('\n')
+        print('Settings')
+        print('\n')
+    def nation_screen(self, game):
+        print(self.hr)
+        print('\n')
+        print('Nations')
+        print('\n')
+    def build_screen(self, game):
+        print(self.hr)
+        print('\n')
+        print('Build')
+        print('\n')
+
 if __name__=="__main__":
    from civ_game import *
    nation1 = Nation("Nation1")

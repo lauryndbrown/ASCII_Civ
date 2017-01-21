@@ -19,6 +19,7 @@ class Game(ABC):
         Note that it calls abstract method self.tick(). 
         """
         print("The Game Begins!") #Should be done by display
+        self.display.game_screen(self)
         still_playing = True
         while still_playing:
             still_playing = self.tick() 
@@ -29,7 +30,6 @@ class Game(ABC):
         MUST be extended to return Boolean value for 
         still_playing in start function
         """
-        self.display.game_screen(self)
 
     def next_action(self, action):
         if action == Game.END_GAME:
