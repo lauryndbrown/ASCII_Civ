@@ -26,7 +26,7 @@ The command line version assumes the characters `'#@%S?+:*,. '` to use as conver
 python ascii_art.py path\to\image
 ```
 ####Adding to your own Code
-Pillow is a dependcy.
+Pillow is a dependency.
 ```
 from ascii_art.py import ASCII_ART
 from PIL import Pillow
