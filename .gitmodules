@@ -1,0 +1,3 @@
+[submodule "civ_game/AsciiGame"]
+	path = civ_game/AsciiGame
+	url = https://github.com/lauryndbrown/AsciiGame.git
