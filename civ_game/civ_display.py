@@ -1,12 +1,9 @@
 import sys
 sys.path.append('AsciiGame\\ascii_game')
-print(sys.path)
-from ascii_art import ASCII_Art 
+ 
 from PIL import Image
-from game_display import Display
-from input_tools import *
-from subprocess import call
-import os
+from game_display.display import Display
+
 class CivDisplay(Display):
     """
     ASCII Art for game
@@ -17,7 +14,6 @@ class CivDisplay(Display):
     HR_LIGHT = '_'
     #Images Directory
     IMAGES = "Images\\"    
-    CHARS = list('#@%S?+:*,. ')
     #Offsets used to determine the whitespace needed to fill the screen
     TITLE_OFFSET = 3
     IN_GAME_MENU_OFFSET = 4
@@ -29,8 +25,6 @@ class CivDisplay(Display):
     def __init__(self, col_size=50):
         super().__init__(col_size)
         self.last_screen_method = None
-        self.img_converter = ASCII_Art(self.CHARS)
-
 
     def start_menu(self):
         """
@@ -50,7 +44,12 @@ class CivDisplay(Display):
             #print("Last Saved Game")
         return new_game
         self.last_menu = (self.start_menu, ())
-
+    
+    def ask_player_details(self):
+        #Get Names for Player 1
+        player_name = are_you_sure("What's your name? ")
+        nation_name = are_you_sure("What will you name your nation? ")
+        return player_name, nation_name
     def game_screen(self, game):
         """
         Displays all information to the screen during a game
@@ -128,30 +127,7 @@ class CivDisplay(Display):
         """
         print("End Game")
 
-    def center(self, message, border, size=os.get_terminal_size().columns):
-        """
-        Returns a string with message centered between characters of a given border
-        """
-        return message.center(size, border)
-    
-    def format_HR(self, border, size=os.get_terminal_size().columns-1):
-        """
-        Returns a Horizontal Rule of length size
-        """
-        return border*size
-    def clear_screen(self):
-        """
-        Clears the Screen
-        """
-        print()
-        call(["clear"])
-    def fill_screen(self, offset):
-        """
-        Fills remaining lines of screen with Whitespace
-        """
-        lines = os.get_terminal_size().lines - 1
-        if offset < lines:
-            print('\n'*(lines-offset))
+   
 if __name__=="__main__":
    from civ_game import *
    nation1 = Nation("Nation1")

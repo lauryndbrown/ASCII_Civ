@@ -5,7 +5,6 @@ Writen by Lauryn D. Brown
 """
 import sys
 
-from input_tools import * 
 from game import Game, Choice
 from player import Player
 from civ_display import CivDisplay
@@ -129,9 +128,8 @@ def create_new_game(display):
     Creates a New CivGame complete with the players
     Prompts the user to name their Player and their Nation
     """
-    #Get Names for Player 1
-    player_1_name = are_you_sure("What's your name? ")
-    nation_1_name = are_you_sure("What will you name your nation? ")
+     
+    player_name, nation_name = display.ask_player_details()
     #Create Nations for Both Players
     nation_1 = Nation(nation_1_name)
     nation_2 = Nation(CivPlayer.DEFAULT_OPPONENT_NATION)
