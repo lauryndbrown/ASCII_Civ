@@ -3,6 +3,8 @@ sys.path.append('AsciiGame\\ascii_game')
  
 from PIL import Image
 from game_display.display import Display
+from game_display.input_tools import *
+import os
 
 class CivDisplay(Display):
     """
@@ -31,7 +33,7 @@ class CivDisplay(Display):
         Displays Welcome Message when Game Starts
         """
         image = Image.open(self.IMAGES+"title.png")
-        ascii_img = self.img_converter.image_to_ascii(image, 300)
+        ascii_img = self.image_converter.image_to_ascii(image, 300)
         print(self.center("ASCII CIV", self.HR_BOLD))
         print(ascii_img, end="")
         print(self.format_HR(' '))
@@ -61,13 +63,7 @@ class CivDisplay(Display):
         self.fill_screen(self.GAME_SCREEN_OFFSET)
         self._in_game_menu(game.menu)
         self.last_menu = (self.game_screen, (game,))
-
-    def reset(self):
-        """
-        Re-prints the current screen 
-        """
-        self.last_menu[0](*tuple(self.last_menu[1]))
-
+   
     def _scores(self, game):
         """
         Private method to display player scores

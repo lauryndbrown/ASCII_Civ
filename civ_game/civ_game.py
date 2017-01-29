@@ -5,9 +5,10 @@ Writen by Lauryn D. Brown
 """
 import sys
 
+from civ_display import CivDisplay
+print(sys.path)
 from game import Game, Choice
 from player import Player
-from civ_display import CivDisplay
 
 class Citizen:
     """
@@ -129,7 +130,7 @@ def create_new_game(display):
     Prompts the user to name their Player and their Nation
     """
      
-    player_name, nation_name = display.ask_player_details()
+    player_1_name, nation_1_name = display.ask_player_details()
     #Create Nations for Both Players
     nation_1 = Nation(nation_1_name)
     nation_2 = Nation(CivPlayer.DEFAULT_OPPONENT_NATION)
