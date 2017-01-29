@@ -1,6 +1,8 @@
-from ascii_art import ASCII_Art 
+import sys
+sys.path.append('AsciiGame/ascii_game')
+from ascii_game.ascii_art import ASCII_Art 
 from PIL import Image
-from game_display import Display
+from ascii_game.game_display import Display
 from input_tools import *
 from subprocess import call
 import os
