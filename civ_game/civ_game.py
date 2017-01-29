@@ -6,7 +6,7 @@ Writen by Lauryn D. Brown
 import sys
 
 from input_tools import * 
-from ascii_game import Game, Choice
+from game import Game, Choice
 from player import Player
 from civ_display import CivDisplay
 
