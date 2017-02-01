@@ -1,2 +1,3 @@
 import sys
-sys.path.append('AsciiGame/ascii_game')
+#Add AsciiGame Modules to the path
+sys.path.append('civ_game\\AsciiGame')

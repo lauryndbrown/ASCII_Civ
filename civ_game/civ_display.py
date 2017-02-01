@@ -1,9 +1,6 @@
-import sys
-sys.path.append('AsciiGame\\ascii_game')
- 
 from PIL import Image
-from game_display.display import Display
-from game_display.input_tools import *
+from ascii_game.game_display.display import Display
+from ascii_game.game_display.input_tools import *
 import os
 
 class CivDisplay(Display):
@@ -15,7 +12,7 @@ class CivDisplay(Display):
     HR_DASHED = '-'
     HR_LIGHT = '_'
     #Images Directory
-    IMAGES = "Images\\"    
+    IMAGES = "civ_game\\Images\\"    
     #Offsets used to determine the whitespace needed to fill the screen
     TITLE_OFFSET = 3
     IN_GAME_MENU_OFFSET = 4
@@ -125,7 +122,7 @@ class CivDisplay(Display):
 
    
 if __name__=="__main__":
-   from civ_game import *
+   from civ_game.civ_game import *
    nation1 = Nation("Nation1")
    nation2 = Nation("Nation2")
    player1 = CivPlayer("Player1", nation1)

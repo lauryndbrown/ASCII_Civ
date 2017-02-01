@@ -4,11 +4,9 @@ Beginning as a Utopia-like Game with (hopefully) some clever ASCII art.
 Writen by Lauryn D. Brown 
 """
 import sys
-
-from civ_display import CivDisplay
-print(sys.path)
-from game import Game, Choice
-from player import Player
+from civ_game.civ_display import CivDisplay
+from ascii_game.game import Game, Choice
+from ascii_game.player import Player
 
 class Citizen:
     """
