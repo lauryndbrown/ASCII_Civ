@@ -12,17 +12,20 @@ class Citizen:
     """
     Class representing people in a city    
     """
-    def __init__(self, nation, happiness, health):
-        self.nation = nation
+    def __init__(self, happiness=100, health=100):
         self.happiness = happiness
         self.health = health
 class Building:
     """
     Class representing buildings in a city
     """
-    def __init__(self, name, building_type):
+    SAMPLE_TYPE = "sample"
+    def __init__(self, name, building_type=None):
         self.name = name
-        self.building_type = building_type
+        if building_type is None:
+            self.building_type = Building.SAMPLE_TYPE
+        else:
+            self.building_type = building_type
 class City:
     """
     Class representing cities
