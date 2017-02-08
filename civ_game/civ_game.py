@@ -5,65 +5,9 @@ Writen by Lauryn D. Brown
 """
 import sys
 from civ_game.civ_display import CivDisplay
+from civ_game.game_entities import *
 from ascii_game.game import Game, Choice
 from ascii_game.player import Player
-
-class Citizen:
-    """
-    Class representing people in a city    
-    """
-    def __init__(self, happiness=100, health=100):
-        self.happiness = happiness
-        self.health = health
-class Building:
-    """
-    Class representing buildings in a city
-    """
-    SAMPLE_TYPE = "sample"
-    def __init__(self, name, building_type=None):
-        self.name = name
-        if building_type is None:
-            self.building_type = Building.SAMPLE_TYPE
-        else:
-            self.building_type = building_type
-class City:
-    """
-    Class representing cities
-    """
-    def __init__(self, name, citizens=[], buildings=[]):
-        self.name = name
-        self.citizens = citizens
-        self.buildings = buildings
-    def add_citizen(self, citizen):
-        if citizen not in self.citizens:
-            self.citizens.append(citizen)
-    def remove_citizen(self, citizen):
-        if citizen in self.citizens:
-            self.citizens.remove(citizen)
-    def add_building(self, building):
-        if building not in self.buildings:
-            self.buildings.append(building)
-    def remove_building(self, building):
-        if building in self.buildings:
-            self.buildings.remove(building)
-class Nation:
-    """
-    Class representing Nations 
-    """
-    def __init__(self, name, wealth=100, cities=[]):
-        self.name = name
-        self.wealth = wealth
-        self.cities = cities
-    def add_city(self, cities):
-        if city not in self.cities:
-            self.cities.append(city)
-    def remove_city(self, city):
-        if city in self.city:
-            self.cities.remove(city)
-    def cities_names(self):
-        return [city.name for city in self.cities]
-    def __str__(self):
-        return "Name: "+self.name+" Wealth:"+str(self.wealth)+"\nCities:"+str(self.cities_names())
 class CivPlayer(Player):
     """
     Player specific to the CivGame class
@@ -76,6 +20,7 @@ class CivPlayer(Player):
         self._nation = nation
         self.score = 0
         self.high_score = 0
+        self.selected_city = None
     @property
     def nation(self):
         return self._nation
@@ -105,14 +50,22 @@ class CivGame(Game):
         settings_menu = []
         nation_menu = []
         build_menu = []
-        #Build Menus
+        #Game Menu
         game_menu.append(Choice("End Game",self.end_game, None, None))
         game_menu.append(Choice("Settings",self.display.settings_screen, (self,), self.SETTINGS_MENU))
         game_menu.append(Choice("Nation Details",self.display.nation_screen, (self,), self.NATION_MENU))
         game_menu.append(Choice("Build",self.display.build_screen, (self,), self.BUILD_MENU))
+        #Settings Menu
         settings_menu.append(Choice(self.BACK_OPTION,self.display.game_screen, (self,), self.GAME_MENU))
+        #Nation Details Menu
         nation_menu.append(Choice(self.BACK_OPTION,self.display.game_screen, (self,), self.GAME_MENU))
+        #Build Menu
         build_menu.append(Choice(self.BACK_OPTION,self.display.game_screen, (self,), self.GAME_MENU))
+        build_menu.append(Choice("New City",self.display.build_screen, (self,), None))
+        build_menu.append(Choice("Residentail Buildings",self.display.build_screen, (self,), None))
+        build_menu.append(Choice("Food Buildings",self.display.build_screen, (self,), None))
+        build_menu.append(Choice("Equipment Buildings",self.display.build_screen, (self,), None))
+        build_menu.append(Choice("Community Buildings",self.display.build_screen, (self,), None))
         self.menus = {self.GAME_MENU:game_menu, self.SETTINGS_MENU:settings_menu,self.NATION_MENU:nation_menu, self.BUILD_MENU:build_menu}
     
         #Current game menu is pointed to by self.menu
@@ -120,6 +73,7 @@ class CivGame(Game):
         #Because the game has just started the previous menu is None
         self.prev_menu = None
         self.day = 0
+       
     def end_game(self):
         """
         Method Called when the game ends
@@ -130,16 +84,19 @@ def create_new_game(display):
     Creates a New CivGame complete with the players
     Prompts the user to name their Player and their Nation
     """
-     
-    player_1_name, nation_1_name = display.ask_player_details()
+    player_1_name, nation_1_name, city_1_name = display.ask_player_details()
     #Create Nations for Both Players
     nation_1 = Nation(nation_1_name)
+    city_1 = City(city_1_name)
+    nation_1.add_city(city_1)
     nation_2 = Nation(CivPlayer.DEFAULT_OPPONENT_NATION)
     #Create both players
     player_1 = CivPlayer(player_1_name,nation_1)
+    player_1.selected_city = city_1
     player_2 = CivPlayer(CivPlayer.DEFAULT_OPPONENT_NAME, nation_2)
     #Create Game
-    return CivGame(display, player_1, player_2)
+    game = CivGame(display, player_1, player_2)
+    return game
 def load_saved_game(display):
     """
     Loads Saved Game from File
@@ -164,8 +121,11 @@ if __name__=="__main__":
         Plays the game no introduction
         """
         nation1 = Nation("Nation1")
+        city_1 = City("City1")
+        nation1.add_city(city_1)
         nation2 = Nation("Nation2")
         player1 = CivPlayer("Player1", nation1)
+        player1.selected_city = city_1
         player2 = CivPlayer("Player2",nation2)
         display = CivDisplay()
         game = CivGame(display,player1,player2)

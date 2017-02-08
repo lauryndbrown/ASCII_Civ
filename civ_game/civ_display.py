@@ -1,6 +1,7 @@
 from PIL import Image
 from ascii_game.game_display.display import Display
 from ascii_game.game_display.input_tools import *
+from civ_game.game_entities import Building
 import os
 
 class CivDisplay(Display):
@@ -19,7 +20,7 @@ class CivDisplay(Display):
     GAME_SCREEN_OFFSET = 6 + TITLE_OFFSET + IN_GAME_MENU_OFFSET 
     SETTINGS_SCREEN_OFFSET = 0 + TITLE_OFFSET + IN_GAME_MENU_OFFSET
     NATION_SCREEN_OFFSET = 0 + TITLE_OFFSET + IN_GAME_MENU_OFFSET
-    BUILD_SCREEN_OFFSET = 0 + TITLE_OFFSET + IN_GAME_MENU_OFFSET
+    BUILD_SCREEN_OFFSET = 4 + TITLE_OFFSET + IN_GAME_MENU_OFFSET
 
     def __init__(self, col_size=50):
         super().__init__(col_size)
@@ -45,10 +46,13 @@ class CivDisplay(Display):
         self.last_menu = (self.start_menu, ())
     
     def ask_player_details(self):
-        #Get Names for Player 1
+        """
+        Get Names for Player 1
+        """
         player_name = are_you_sure("What's your name? ")
         nation_name = are_you_sure("What will you name your nation? ")
-        return player_name, nation_name
+        city_name = are_you_sure("What will you name your first city? ")
+        return player_name, nation_name, city_name
     def game_screen(self, game):
         """
         Displays all information to the screen during a game
@@ -101,6 +105,8 @@ class CivDisplay(Display):
         """
         self.clear_screen()
         print(self.center("NATION DETAILS", self.HR_BOLD))
+        nation = game.player_1.nation
+        print("{}: {}".format("Cities: ", str(len(nation.cities)))) 
         self.fill_screen(self.NATION_SCREEN_OFFSET)
         self._in_game_menu(game.menu)
         self.last_menu = (self.nation_screen, (game,))
@@ -111,6 +117,15 @@ class CivDisplay(Display):
         """
         self.clear_screen()
         print(self.center("BUILD", self.HR_BOLD))
+        city = game.player_1.selected_city
+        print("{}: {}".format("Residential Buildings",
+                city.num_buildings(Building.RESIDENTIAL)))
+        print("{}: {}".format("Food Buildings",
+                city.num_buildings(Building.FOOD)))
+        print("{}: {}".format("Equipment Buildings",
+                city.num_buildings(Building.EQUIPMENT)))
+        print("{}: {}".format("Community Buildings",
+                city.num_buildings(Building.COMMUNITY)))
         self.fill_screen(self.BUILD_SCREEN_OFFSET)
         self._in_game_menu(game.menu)
         self.last_menu = (self.build_screen, (game,))
