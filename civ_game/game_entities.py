@@ -20,6 +20,11 @@ class Building:
             self.building_type = Building.SAMPLE_TYPE
         else:
             self.building_type = building_type
+    def get_type_cost(building_type):
+        if building_type==Building.RESIDENTIAL:
+            return 20
+        else:
+            return 40
 class City:
     """
     Class representing cities
@@ -56,6 +61,13 @@ class Nation:
         self.name = name
         self.wealth = wealth
         self.cities = cities
+    def add_building(self, city, building_type):
+        cost = Building.get_type_cost(building_type)
+        if self.wealth>=cost:
+            city.buildings.append(Building(building_type, building_type))
+            self.wealth-=cost
+            return True
+        return False
     def add_city(self, city):
         if city not in self.cities:
             self.cities.append(city)

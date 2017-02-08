@@ -62,7 +62,7 @@ class CivGame(Game):
         #Build Menu
         build_menu.append(Choice(self.BACK_OPTION,self.display.game_screen, (self,), self.GAME_MENU))
         build_menu.append(Choice("New City",self.display.build_screen, (self,), None))
-        build_menu.append(Choice("Residentail Buildings",self.display.build_screen, (self,), None))
+        build_menu.append(Choice("Residentail Buildings",self.display.build_screen, (self,self.display.RESIDENTIAL), None))
         build_menu.append(Choice("Food Buildings",self.display.build_screen, (self,), None))
         build_menu.append(Choice("Equipment Buildings",self.display.build_screen, (self,), None))
         build_menu.append(Choice("Community Buildings",self.display.build_screen, (self,), None))

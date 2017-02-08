@@ -22,6 +22,11 @@ class CivDisplay(Display):
     NATION_SCREEN_OFFSET = 0 + TITLE_OFFSET + IN_GAME_MENU_OFFSET
     BUILD_SCREEN_OFFSET = 4 + TITLE_OFFSET + IN_GAME_MENU_OFFSET
 
+    #Constants for build screen
+    RESIDENTIAL = "residential"
+    FOOD = "food"
+    EQUIPMENT = "equipment"
+    COMMUNITY = "community"
     def __init__(self, col_size=50):
         super().__init__(col_size)
         self.last_screen_method = None
@@ -111,24 +116,49 @@ class CivDisplay(Display):
         self._in_game_menu(game.menu)
         self.last_menu = (self.nation_screen, (game,))
 
-    def build_screen(self, game):
+    def build_screen(self, game, selected_building=None):
         """
         Build Screen
         """
         self.clear_screen()
         print(self.center("BUILD", self.HR_BOLD))
         city = game.player_1.selected_city
-        print("{}: {}".format("Residential Buildings",
+        if selected_building is None:
+            print("{}: {}".format("Residential Buildings",
                 city.num_buildings(Building.RESIDENTIAL)))
-        print("{}: {}".format("Food Buildings",
+            print("{}: {}".format("Food Buildings",
                 city.num_buildings(Building.FOOD)))
-        print("{}: {}".format("Equipment Buildings",
+            print("{}: {}".format("Equipment Buildings",
                 city.num_buildings(Building.EQUIPMENT)))
-        print("{}: {}".format("Community Buildings",
+            print("{}: {}".format("Community Buildings",
                 city.num_buildings(Building.COMMUNITY)))
-        self.fill_screen(self.BUILD_SCREEN_OFFSET)
-        self._in_game_menu(game.menu)
-        self.last_menu = (self.build_screen, (game,))
+            self.fill_screen(self.BUILD_SCREEN_OFFSET)
+            self._in_game_menu(game.menu)
+            self.last_menu = (self.build_screen, (game,))
+        elif selected_building==self.RESIDENTIAL:
+            print("Residential Building")
+            print("Image Placeholder")
+            print("{}: {}".format("Cost", 20))
+            response = yes_or_no("Build Residential Building?")
+            if response:
+                nation = game.player_1.nation
+                success = nation.add_building(city, Building.RESIDENTIAL)
+                if success:
+                    print("Added Building")
+                else:
+                    print("Building not added. Inadequate Funds")
+            self.fill_screen(self.BUILD_SCREEN_OFFSET)
+            self._in_game_menu(game.menu)
+            self.last_menu = (self.build_screen, (game,))
+
+                
+    def build_screen_detail(self, game):
+        """
+        Detail for building a particular building
+        """
+        self.clear_screen()
+        print(self.center("BUILD", self.HR_BOLD))
+
     def end_game(self):
         """
         Message shown when the game exits
