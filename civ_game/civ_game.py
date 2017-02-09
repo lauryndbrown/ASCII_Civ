@@ -61,11 +61,11 @@ class CivGame(Game):
         nation_menu.append(Choice(self.BACK_OPTION,self.display.game_screen, (self,), self.GAME_MENU))
         #Build Menu
         build_menu.append(Choice(self.BACK_OPTION,self.display.game_screen, (self,), self.GAME_MENU))
-        build_menu.append(Choice("New City",self.display.build_screen, (self,), None))
+        #build_menu.append(Choice("New City",self.display.build_screen, (self,), None))
         build_menu.append(Choice("Residentail Buildings",self.display.build_screen, (self,self.display.RESIDENTIAL), None))
-        build_menu.append(Choice("Food Buildings",self.display.build_screen, (self,), None))
-        build_menu.append(Choice("Equipment Buildings",self.display.build_screen, (self,), None))
-        build_menu.append(Choice("Community Buildings",self.display.build_screen, (self,), None))
+        build_menu.append(Choice("Food Buildings",self.display.build_screen, (self,self.display.FOOD), None))
+        build_menu.append(Choice("Equipment Buildings",self.display.build_screen, (self,self.display.EQUIPMENT), None))
+        build_menu.append(Choice("Community Buildings",self.display.build_screen, (self,self.display.COMMUNITY), None))
         self.menus = {self.GAME_MENU:game_menu, self.SETTINGS_MENU:settings_menu,self.NATION_MENU:nation_menu, self.BUILD_MENU:build_menu}
     
         #Current game menu is pointed to by self.menu

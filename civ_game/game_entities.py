@@ -23,8 +23,14 @@ class Building:
     def get_type_cost(building_type):
         if building_type==Building.RESIDENTIAL:
             return 20
-        else:
+        elif building_type==Building.FOOD:
             return 40
+        elif building_type==Building.EQUIPMENT:
+            return 60
+        elif building_type==Building.COMMUNITY:
+            return 40
+        else:
+            raise ValueError("Building type invalid")
 class City:
     """
     Class representing cities

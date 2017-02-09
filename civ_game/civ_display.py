@@ -19,7 +19,7 @@ class CivDisplay(Display):
     IN_GAME_MENU_OFFSET = 4
     GAME_SCREEN_OFFSET = 6 + TITLE_OFFSET + IN_GAME_MENU_OFFSET 
     SETTINGS_SCREEN_OFFSET = 0 + TITLE_OFFSET + IN_GAME_MENU_OFFSET
-    NATION_SCREEN_OFFSET = 0 + TITLE_OFFSET + IN_GAME_MENU_OFFSET
+    NATION_SCREEN_OFFSET = 6 + TITLE_OFFSET + IN_GAME_MENU_OFFSET
     BUILD_SCREEN_OFFSET = 4 + TITLE_OFFSET + IN_GAME_MENU_OFFSET
 
     #Constants for build screen
@@ -77,10 +77,10 @@ class CivDisplay(Display):
         print(self.center("Day "+str(game.day), ' '))
         print("{:10} {:{col}} {:{col}}".format("Player: ", game.player_1.name, game.player_2.name, col=self.col_size)) 
         print("{:10} {:{col}} {:{col}}".format("Nation: ",game.player_1.nation.name, game.player_2.nation.name, col=self.col_size)) 
-        print("{:10} {:{col}} {:{col}}".format("Wealth: ", str(game.player_2.nation.wealth), str(game.player_2.nation.wealth), col=self.col_size)) 
+        print("{:10} {:{col}} {:{col}}".format("Wealth: ", str(game.player_1.nation.wealth), str(game.player_2.nation.wealth), col=self.col_size)) 
 
     def _board(self, player_1, player_2):
-        print("{:10} {:{col}} {:{col}}".format("Cities: ", str(len(player_2.nation.cities)), str(len(player_2.nation.cities)), col=self.col_size)) 
+        print("{:10} {:{col}} {:{col}}".format("Cities: ", str(len(player_1.nation.cities)), str(len(player_2.nation.cities)), col=self.col_size)) 
 
     def _in_game_menu(self, choices):
         """
@@ -112,6 +112,7 @@ class CivDisplay(Display):
         print(self.center("NATION DETAILS", self.HR_BOLD))
         nation = game.player_1.nation
         print("{}: {}".format("Cities: ", str(len(nation.cities)))) 
+        self.building_stats(game.player_1.selected_city)
         self.fill_screen(self.NATION_SCREEN_OFFSET)
         self._in_game_menu(game.menu)
         self.last_menu = (self.nation_screen, (game,))
@@ -124,25 +125,35 @@ class CivDisplay(Display):
         print(self.center("BUILD", self.HR_BOLD))
         city = game.player_1.selected_city
         if selected_building is None:
-            print("{}: {}".format("Residential Buildings",
-                city.num_buildings(Building.RESIDENTIAL)))
-            print("{}: {}".format("Food Buildings",
-                city.num_buildings(Building.FOOD)))
-            print("{}: {}".format("Equipment Buildings",
-                city.num_buildings(Building.EQUIPMENT)))
-            print("{}: {}".format("Community Buildings",
-                city.num_buildings(Building.COMMUNITY)))
+            self.building_stats(city) 
             self.fill_screen(self.BUILD_SCREEN_OFFSET)
             self._in_game_menu(game.menu)
             self.last_menu = (self.build_screen, (game,))
-        elif selected_building==self.RESIDENTIAL:
-            print("Residential Building")
+        else:
+            display_building_type = None
+            building_type = None
+            if selected_building==self.RESIDENTIAL:
+                display_building_type = self.RESIDENTIAL
+                building_type = Building.RESIDENTIAL
+            elif selected_building==self.FOOD:
+                display_building_type = self.FOOD
+                building_type = Building.FOOD
+            elif selected_building==self.EQUIPMENT:
+                display_building_type = self.EQUIPMENT
+                building_type = Building.EQUIPMENT
+            elif selected_building==self.COMMUNITY:
+                display_building_type = self.COMMUNITY
+                building_type = Building.COMMUNITY
+            else:
+                raise ValueError("Selected Building invalid")
+            building_cost =  Building.get_type_cost(building_type)
+            print(display_building_type)
             print("Image Placeholder")
-            print("{}: {}".format("Cost", 20))
-            response = yes_or_no("Build Residential Building?")
+            print("{}: {}".format("Cost", building_cost))
+            response = yes_or_no("Build {}?".format(display_building_type))
             if response:
                 nation = game.player_1.nation
-                success = nation.add_building(city, Building.RESIDENTIAL)
+                success = nation.add_building(city, building_type)
                 if success:
                     print("Added Building")
                 else:
@@ -151,7 +162,18 @@ class CivDisplay(Display):
             self._in_game_menu(game.menu)
             self.last_menu = (self.build_screen, (game,))
 
-                
+    def building_stats(self, city):
+        """
+        Building Stats a particular city
+        """
+        print("{}: {}".format("Residential Buildings",
+            city.num_buildings(Building.RESIDENTIAL)))
+        print("{}: {}".format("Food Buildings",
+            city.num_buildings(Building.FOOD)))
+        print("{}: {}".format("Equipment Buildings",
+            city.num_buildings(Building.EQUIPMENT)))
+        print("{}: {}".format("Community Buildings",
+            city.num_buildings(Building.COMMUNITY))) 
     def build_screen_detail(self, game):
         """
         Detail for building a particular building
